@@ -1,0 +1,200 @@
+#!/usr/bin/env python
+# coding: utf-8
+
+# # SHAPEAI PROJECT ON PYTHON 
+# CLINTAN CYRIL A
+# 
+
+# IMPORTING LIBRARIES FOR OUR PURPOSE
+
+# In[1]:
+
+
+import pandas as pd
+import numpy as np
+import seaborn as sns
+import matplotlib as plt
+get_ipython().run_line_magic('matplotlib', 'inline')
+import math
+
+
+# importing the dataset Titanic Survival
+# 
+
+# In[3]:
+
+
+data=pd.read_csv("C:/Users/Clintan Cyril/Downloads/train (1).csv")
+
+
+# print the dataset
+
+# In[5]:
+
+
+print(data.head(10))
+
+
+# Reading the Dataset using pandas
+# 
+# we use the read_csv function to read the file in python and pandas DataFrame method to convert file into the data frame
+
+# To know about the no. of rows and solumns using shape function
+
+# In[7]:
+
+
+data=pd.DataFrame(data)
+
+
+# In[8]:
+
+
+print(data.head())
+
+
+# In[9]:
+
+
+data.shape
+
+
+# # Handling the null values
+# 
+# Dataset may contains many missing values/null values,
+# we need to drop them out or replace them with suitable value.
+
+# In[10]:
+
+
+data.isnull().sum()
+
+
+# seperating out the columns which have more than 35% of the values missing in the dataset
+
+# In[13]:
+
+
+drop=data.isnull().sum()[data.isnull().sum()>(35/100*data.shape[0])]
+drop
+
+
+# In[14]:
+
+
+drop.index
+
+
+# In[15]:
+
+
+
+
+
+# In[18]:
+
+
+data.dropna(0)
+
+
+# In[20]:
+
+
+data.drop(drop.index, axis=1, inplace=True)
+
+
+# In[21]:
+
+
+data.isnull().sum()
+
+
+# In[22]:
+
+
+data.fillna(data.mean(), inplace=True)
+data.isnull().sum()
+
+
+# Embarked has some string values
+
+# In[24]:
+
+
+data['Embarked'].describe()
+
+
+# In[25]:
+
+
+data['Embarked'].fillna('S',inplace=True)
+
+
+# In[26]:
+
+
+data.isnull().sum()
+
+
+# In[27]:
+
+
+data.corr()
+
+
+# In[33]:
+
+
+data['familysize']=data['SibSp']+data['Parch']
+data.drop(['SibSp','Parch'], axis=1,inplace=True)
+
+
+# In[36]:
+
+
+data.corr()
+
+
+# FamilySize in the ship does not have much correlance with survival rate
+
+# Checking whether the person was alone are not getting affect the survival rate
+
+# In[38]:
+
+
+data['Alone']=[0 if data['familysize'][i]>0 else 1 for i in data.index]
+data.head()
+
+
+# In[39]:
+
+
+data.groupby(['Alone'])['Survived'].mean()
+
+
+# In[41]:
+
+
+data[['Alone','Fare']].corr()
+
+
+# If the person was not alone then the chance of ticket price would be high
+
+# In[42]:
+
+
+data.groupby(['Embarked'])['Survived'].mean()
+
+
+# In[ ]:
+
+
+Conclusion
+
+If the person was not alone then the chance of ticket price would be high
+
+Female passengers were prioritized over man
+
+people with high class or rich people have higher survival rate than others.
+
+the person was alone are not getting affect the survival rate
